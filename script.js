@@ -1,9 +1,11 @@
+const list = document.getElementById('lista-tarefas');
+
 function onClickChangeBgColor(element) {
   element.addEventListener('click', (event) => {
     const selected = document.getElementsByClassName('selectedItem')[0];
     if (selected) {
       selected.classList.remove('selectedItem');
-    } 
+    }
     event.target.classList.add('selectedItem');
   });
 }
@@ -22,7 +24,6 @@ function createItem(text) {
   listItem.innerText = text;
   onClickChangeBgColor(listItem);
   doubleClickEvent(listItem);
-  const list = document.getElementById('lista-tarefas');
   list.appendChild(listItem);
 }
 function createCompletedItem(text) {
@@ -31,20 +32,19 @@ function createCompletedItem(text) {
   listItem.classList.add('completed');
   onClickChangeBgColor(listItem);
   doubleClickEvent(listItem);
-  const list = document.getElementById('lista-tarefas');
   list.appendChild(listItem);
 }
 
 const addButton = document.getElementById('criar-tarefa');
 addButton.addEventListener('click', () => {
   const inputText = document.getElementById('texto-tarefa').value;
-  document.getElementById('texto-tarefa').value = ''
+  document.getElementById('texto-tarefa').value = '';
   createItem(inputText);
 });
 
 const clearButton = document.getElementById('apaga-tudo');
 clearButton.addEventListener('click', () => {
-  let allListItems = document.getElementsByTagName('li');
+  const allListItems = document.getElementsByTagName('li');
   for (let index = allListItems.length - 1; index >= 0; index -= 1) {
     allListItems[index].remove();
   }
@@ -52,7 +52,7 @@ clearButton.addEventListener('click', () => {
 
 const clearFinishedButton = document.getElementById('remover-finalizados');
 clearFinishedButton.addEventListener('click', () => {
-  let completedTasks = document.getElementsByClassName('completed');
+  const completedTasks = document.getElementsByClassName('completed');
   for (let index = completedTasks.length - 1; index >= 0; index -= 1) {
     completedTasks[index].remove();
   }
@@ -67,32 +67,30 @@ function isCompleted(element) {
 
 const saveButton = document.getElementById('salvar-tarefas');
 saveButton.addEventListener('click', () => {
-  let allListItems = document.getElementsByTagName('li');
-  let listItemsValues = [];
-  for (let item of allListItems) {
+  const allListItems = document.getElementsByTagName('li');
+  const listItemsValues = [];
+  for (let index = 0; index < allListItems.length; index += 1) {
     listItemsValues.push({
-      value: item.innerText,
-      isCompleted: isCompleted(item),
+      value: allListItems[index].innerText,
+      isCompleted: isCompleted(allListItems[index]),
     });
   }
-  localStorage.setItem('items', JSON.stringify(listItemsValues))
+  localStorage.setItem('items', JSON.stringify(listItemsValues));
 });
 
 const moveUpButton = document.getElementById('mover-cima');
 moveUpButton.addEventListener('click', () => {
-  let selectedItem = document.getElementsByClassName('selectedItem')[0];
+  const selectedItem = document.getElementsByClassName('selectedItem')[0];
   if (selectedItem && selectedItem.previousSibling !== null) {
-    document.getElementById('lista-tarefas').insertBefore(selectedItem, selectedItem.previousSibling);
+    list.insertBefore(selectedItem, selectedItem.previousSibling);
   }
 });
 
-
 const moveDownButton = document.getElementById('mover-baixo');
 moveDownButton.addEventListener('click', () => {
-  let selectedItem = document.getElementsByClassName('selectedItem')[0];
-  if(selectedItem && selectedItem.nextSibling !== null) {
-    let list = document.getElementById('lista-tarefas');
-      list.insertBefore(selectedItem.nextSibling, selectedItem);
+  const selectedItem = document.getElementsByClassName('selectedItem')[0];
+  if (selectedItem && selectedItem.nextSibling !== null) {
+    list.insertBefore(selectedItem.nextSibling, selectedItem);
   }
 });
 
@@ -102,15 +100,19 @@ removeSelectedButton.addEventListener('click', () => {
   selectedItem.remove();
 });
 
-window.onload = () => {
-  if (localStorage.getItem('items') !== null) {
-    let itemsValues = JSON.parse(localStorage.getItem('items'));
-    for(let item of itemsValues) {
-      if (item.isCompleted) {
-        createCompletedItem(item.value);
-      } else {
-        createItem(item.value)
-      }
-    }
+function validateAndCreate(index, iterable) {
+  if (iterable[index].isCompleted) {
+    createCompletedItem(iterable[index].value);
+  } else {
+    createItem(iterable[index].value);
   }
 }
+
+window.onload = () => {
+  if (localStorage.getItem('items') !== null) {
+    const itemsValues = JSON.parse(localStorage.getItem('items'));
+    for (let index = 0; index < itemsValues.length; index += 1) {
+      validateAndCreate(index, itemsValues);
+    }
+  }
+};
