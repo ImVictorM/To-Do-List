@@ -8,6 +8,15 @@ function onClickChangeBgColor(element) {
   });
 }
 
+function doubleClickEvent(element) {
+  element.addEventListener('dblclick', (event) => {
+    if (event.target.classList.contains('completed')) {
+      event.target.classList.remove('completed');
+    } else {
+      event.target.classList.add('completed');
+    }
+  });
+}
 
 const addButton = document.getElementById('criar-tarefa');
 addButton.addEventListener('click', () => {
@@ -16,6 +25,7 @@ addButton.addEventListener('click', () => {
   const listItem = document.createElement('li');
   listItem.innerText = inputText;
   onClickChangeBgColor(listItem);
+  doubleClickEvent(listItem);
   const list = document.getElementById('lista-tarefas');
   list.appendChild(listItem);
 });
