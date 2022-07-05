@@ -1,7 +1,7 @@
 function onClickChangeBgColor(element) {
   element.addEventListener('click', (event) => {
     const selected = document.getElementsByClassName('selectedItem')[0];
-    if(selected) {
+    if (selected) {
       selected.classList.remove('selectedItem');
     } 
     event.target.classList.add('selectedItem');
@@ -30,4 +30,11 @@ addButton.addEventListener('click', () => {
   list.appendChild(listItem);
 });
 
+let clearButton = document.getElementById('apaga-tudo');
+clearButton.addEventListener('click', () => {
+  let allListItems = document.getElementsByTagName('li');
+  for (let index = allListItems.length - 1; index >= 0; index -= 1) {
+    allListItems[index].remove();
+  }
+});
 
