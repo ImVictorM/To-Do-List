@@ -17,17 +17,29 @@ function doubleClickEvent(element) {
     }
   });
 }
-
-const addButton = document.getElementById('criar-tarefa');
-addButton.addEventListener('click', () => {
-  const inputText = document.getElementById('texto-tarefa').value;
-  document.getElementById('texto-tarefa').value = ''; // reset
+function createItem(text) {
   const listItem = document.createElement('li');
-  listItem.innerText = inputText;
+  listItem.innerText = text;
   onClickChangeBgColor(listItem);
   doubleClickEvent(listItem);
   const list = document.getElementById('lista-tarefas');
   list.appendChild(listItem);
+}
+function createCompletedItem(text) {
+  const listItem = document.createElement('li');
+  listItem.innerText = text;
+  listItem.classList.add('completed');
+  onClickChangeBgColor(listItem);
+  doubleClickEvent(listItem);
+  const list = document.getElementById('lista-tarefas');
+  list.appendChild(listItem);
+}
+
+const addButton = document.getElementById('criar-tarefa');
+addButton.addEventListener('click', () => {
+  const inputText = document.getElementById('texto-tarefa').value;
+  document.getElementById('texto-tarefa').value = ''
+  createItem(inputText);
 });
 
 const clearButton = document.getElementById('apaga-tudo');
@@ -45,3 +57,37 @@ clearFinishedButton.addEventListener('click', () => {
     completedTasks[index].remove();
   }
 });
+
+function isCompleted(element) {
+  if (element.classList.contains('completed')) {
+    return true;
+  }
+  return false;
+}
+
+const saveButton = document.getElementById('salvar-tarefas');
+saveButton.addEventListener('click', () => {
+  let allListItems = document.getElementsByTagName('li');
+  let listItemsValues = [];
+  for (let item of allListItems) {
+    listItemsValues.push({
+      value: item.innerText,
+      isCompleted: isCompleted(item),
+    })
+    
+  }
+  localStorage.setItem('items', JSON.stringify(listItemsValues))
+});
+
+window.onload = () => {
+  if (localStorage.getItem('items') !== null) {
+    let itemsValues = JSON.parse(localStorage.getItem('items'));
+    for(let item of itemsValues) {
+      if (item.isCompleted) {
+        createCompletedItem(item.value);
+      } else {
+        createItem(item.value)
+      }
+    }
+  }
+}
