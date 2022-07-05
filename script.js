@@ -73,10 +73,27 @@ saveButton.addEventListener('click', () => {
     listItemsValues.push({
       value: item.innerText,
       isCompleted: isCompleted(item),
-    })
-    
+    });
   }
   localStorage.setItem('items', JSON.stringify(listItemsValues))
+});
+
+const moveUpButton = document.getElementById('mover-cima');
+moveUpButton.addEventListener('click', () => {
+  let selectedItem = document.getElementsByClassName('selectedItem')[0];
+  if (selectedItem && selectedItem.previousSibling !== null) {
+    document.getElementById('lista-tarefas').insertBefore(selectedItem, selectedItem.previousSibling);
+  }
+});
+
+
+const moveDownButton = document.getElementById('mover-baixo');
+moveDownButton.addEventListener('click', () => {
+  let selectedItem = document.getElementsByClassName('selectedItem')[0];
+  if(selectedItem && selectedItem.nextSibling !== null) {
+    let list = document.getElementById('lista-tarefas');
+      list.insertBefore(selectedItem.nextSibling, selectedItem);
+  }
 });
 
 window.onload = () => {
