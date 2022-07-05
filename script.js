@@ -96,6 +96,12 @@ moveDownButton.addEventListener('click', () => {
   }
 });
 
+const removeSelectedButton = document.getElementById('remover-selecionado');
+removeSelectedButton.addEventListener('click', () => {
+  const selectedItem = document.getElementsByClassName('selectedItem')[0];
+  selectedItem.remove();
+});
+
 window.onload = () => {
   if (localStorage.getItem('items') !== null) {
     let itemsValues = JSON.parse(localStorage.getItem('items'));
