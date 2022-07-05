@@ -30,7 +30,7 @@ addButton.addEventListener('click', () => {
   list.appendChild(listItem);
 });
 
-let clearButton = document.getElementById('apaga-tudo');
+const clearButton = document.getElementById('apaga-tudo');
 clearButton.addEventListener('click', () => {
   let allListItems = document.getElementsByTagName('li');
   for (let index = allListItems.length - 1; index >= 0; index -= 1) {
@@ -38,3 +38,10 @@ clearButton.addEventListener('click', () => {
   }
 });
 
+const clearFinishedButton = document.getElementById('remover-finalizados');
+clearFinishedButton.addEventListener('click', () => {
+  let completedTasks = document.getElementsByClassName('completed');
+  for (let index = completedTasks.length - 1; index >= 0; index -= 1) {
+    completedTasks[index].remove();
+  }
+});
