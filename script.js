@@ -1,6 +1,10 @@
 function onClickChangeBgColor(element) {
   element.addEventListener('click', (event) => {
-    event.target.style.backgroundColor = 'grey';
+    const selected = document.getElementsByClassName('selectedItem')[0];
+    if(selected) {
+      selected.classList.remove('selectedItem');
+    } 
+    event.target.classList.add('selectedItem');
   });
 }
 
